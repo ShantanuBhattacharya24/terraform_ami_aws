@@ -1,16 +1,16 @@
 provider "aws" {
-  region     = "ap-south-1"
-  access_key = "AKIAWXTUJ4MVSYGTMYGT"
-  secret_key = "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"
+  region = "ap-south-1"
+    access_key = "AKIAWXTUJ4MVSYGTMYGT"
+    secret_key = "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"
 }
 
 resource "aws_instance" "myTestInstance" {
-  ami             = "ami-0f9d9a251c1a44858"
-  instance_type   = "t2.micro"
-  key_name        = "terraform_test_key_pair"
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  key_name                    = var.key_name
   security_groups = ["terrafrom_test_sg"]
-
-  user_data = <<-EOL
+  associate_public_ip_address = true
+  user_data                   = <<-EOL
   #!/bin/bash -xe
 
   sudo yum update -y
@@ -26,8 +26,6 @@ output "instanceIds" {
   description = "This is linux test Instances"
   value       = aws_instance.myTestInstance.id
 }
-
-
 
 resource "aws_ami_from_instance" "example" {
   name                    = "terraform-example"
